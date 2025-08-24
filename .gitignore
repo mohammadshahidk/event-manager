@@ -1,0 +1,11 @@
+*.pyc
+*__pycache
+venv/
+env/
+.venv/
+.env
+.env.local
+.vscode/
+.idea/
+*.swp
+*.swo

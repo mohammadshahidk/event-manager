@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "da498e29-8fed-4cb8-8566-fd46972758f3",
+		"name": "Event manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27999715"
+	},
+	"item": [
+		{
+			"name": "create event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Timezone",
+						"value": "America/New_York",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Garlic Festival\",\r\n  \"location\": \"New York\",\r\n  \"start_time\": \"2025-09-18 9:30\",\r\n  \"end_time\": \"2025-09-19 17:30\",\r\n  \"max_capacity\": 50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/events/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list upcoming events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Timezone",
+						"value": "Asia/Kolkata",
+						"type": "text"
+					},
+					{
+						"key": "Timezone",
+						"value": "America/New_York",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"PyCon India 2025\",\r\n  \"location\": \"Banglore\",\r\n  \"start_time\": \"2025-09-12 8:30\",\r\n  \"end_time\": \"2025-09-15 18:30\",\r\n  \"max_capacity\": 500\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/events/?limit&offset",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": null
+						},
+						{
+							"key": "offset",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register attendees",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Timezone",
+						"value": "Asia/Kolkata",
+						"type": "text"
+					},
+					{
+						"key": "Timezone",
+						"value": "America/New_York",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Shahid\",\r\n  \"email\": \"shahid@yopmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/events/5/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events",
+						"5",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list event attendees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Timezone",
+						"value": "Asia/Kolkata",
+						"type": "text"
+					},
+					{
+						"key": "Timezone",
+						"value": "America/New_York",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Shahid\",\r\n  \"email\": \"shahid@yopmail.com\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/events/5/attendees?limit=10&offset=0",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events",
+						"5",
+						"attendees"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
