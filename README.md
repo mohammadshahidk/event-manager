@@ -44,7 +44,7 @@ If no timezone is provided, defaults to Asia/Kolkata.
 Swagger/OpenAPI is enabled.
 Access it at: http://127.0.0.1:8000/swagger/
 
-# A Postman Collection is provided in the repo:
+A Postman Collection is provided in the repo:
 
 Event manager.postman_collection.json
 
