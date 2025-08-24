@@ -17,7 +17,13 @@ use 'python -m venv venv' or 'mkvirtualenv event'
 
 pip install -r requirements.txt
 
-4. Apply Migrations
+4. Database Setup
+
+The project uses SQLite (default Django DB).
+
+A pre-configured event_manager.sqlite3 file is included in the repo for convenience.
+
+-> If you want to start fresh:
 
 python manage.py migrate
 
