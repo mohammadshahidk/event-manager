@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 from .models import Event
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 from attendees.models import Attendees
 from django.utils import timezone
 from .serializers import EventSerializer, EventRegisterSerializer
@@ -11,45 +11,62 @@ from .utils import register_attendee
 
 
 @extend_schema(
+    tags=["Events"],
     parameters=[
         OpenApiParameter(
             name='Timezone',
             location=OpenApiParameter.HEADER,
-            description='Client timezone (e.g. Asia/Kolkata, UTC, America/New_York)',
+            description='Client timezone (e.g., Asia/Kolkata, UTC, America/New_York). '
+                        'If provided, event times will be converted before returning.',
             required=False,
             type=str
         )
-    ]
+    ],
+    responses={
+        200: OpenApiResponse(
+            response=EventSerializer(many=True),
+            description="List of upcoming events."
+        ),
+        201: OpenApiResponse(
+            response=EventSerializer,
+            description="Event created successfully."
+        ),
+    }
 )
 class EventListCreateView(generics.ListCreateAPIView):
     """
     API endpoint for listing and creating events.
-
-    - **GET**: Returns upcoming events where `start_time` is greater than or equal to the current time.
-      - Accepts an optional `TimeZone` header. If provided, `start_time` and `end_time`
-        fields will be converted to the specified timezone before being returned.
-        
-    - **POST**: Creates a new event.
-      - Event times provided in the request body are assumed to be in the given `TimeZone`
-        (defaults to `Asia/Kolkata` if not provided).
-      - The times are stored in UTC internally.
     """
     serializer_class = EventSerializer
     
     def get_queryset(self):
         if self.request.method == 'GET':
-             return Event.objects.filter(start_time__gte=timezone.now()).order_by('start_time')
+             return Event.objects.filter(
+               start_time__gte=timezone.now()).order_by('start_time')
         return Event.objects.all()
     
 
+@extend_schema(
+    tags=["Event Registration"],
+    request=EventRegisterSerializer,
+    responses={
+        201: OpenApiResponse(
+            description="Attendee successfully registered for the event.",
+            response={
+                "message": "Registration successful"
+            }
+        ),
+        400: OpenApiResponse(
+            description="Validation error"
+        ),
+        404: OpenApiResponse(
+            description="Event not found."
+        )
+    }
+)
 class EventRegisteView(generics.GenericAPIView):
     """
     API endpoint to **register an attendee for an event**.
-
-    - **POST**: Registers a new attendee for the given `event_id`.
-      Requires `name` and `email` in the request body.
-      Returns success message if registration is successful, 
-      otherwise returns an error message.
     """
     serializer_class = EventRegisterSerializer
     
@@ -64,13 +81,21 @@ class EventRegisteView(generics.GenericAPIView):
             status=status.HTTP_201_CREATED)
         
 
+@extend_schema(
+    tags=["Event Attendees"],
+    responses={
+        200: OpenApiResponse(
+            response=AttendeeSerializer(many=True),
+            description="List of attendees registered for the given event."
+        ),
+        404: OpenApiResponse(
+            description="Event not found."
+        )
+    }
+)
 class EventAttendeesListView(generics.ListAPIView):
     """
     API endpoint to **list all attendees for a given event**.
-
-    - **GET**: Returns a list of attendees who have registered for the event
-      specified by `event_id` in the URL.
-      Ensures unique attendees using `.distinct()`.
     """
     serializer_class = AttendeeSerializer
     
