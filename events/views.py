@@ -38,7 +38,7 @@ class EventListCreateView(generics.ListCreateAPIView):
     API endpoint for listing and creating events.
     """
     serializer_class = EventSerializer
-    
+    pagination_class = None
     def get_queryset(self):
         if self.request.method == 'GET':
              return Event.objects.filter(
